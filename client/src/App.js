@@ -1,70 +1,71 @@
-import "./App.css";
+import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Home from "./pages/Home";
+import AddProperty from "./pages/AddProperty";
+import Booking from "./pages/Booking";
+import BookingsList from "./pages/BookingsList";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import "./App.css";
 
-function App() {
-  const [houses, setHouses] = useState([]);
-  const [form, setForm] = useState({
-    title: "",
-    price: "",
-    location: "",
-    description: ""
-  });
+function AppContent() {
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const navigate = useNavigate();
 
-  const fetchHouses = async () => {
-    const res = await fetch("http://localhost:5000/houses");
-    const data = await res.json();
-    setHouses(data);
-  };
-
-  useEffect(() => {
-    fetchHouses();
-  }, []);
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await fetch("http://localhost:5000/houses", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form)
-    });
-    setForm({ title: "", price: "", location: "", description: "" });
-    fetchHouses();
-  };
-
-  const deleteHouse = async (id) => {
-    await fetch(`http://localhost:5000/houses/${id}`, {
-      method: "DELETE"
-    });
-    fetchHouses();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    navigate("/");
   };
 
   return (
-    <div className="container">
-      <h1>House Rent</h1>
+    <>
+      <nav className="navbar">
+        <h2>HouseHunt</h2>
 
-      <form onSubmit={handleSubmit}>
-        <input name="title" placeholder="Title" value={form.title} onChange={handleChange} required />
-        <input name="price" placeholder="Price" value={form.price} onChange={handleChange} required />
-        <input name="location" placeholder="Location" value={form.location} onChange={handleChange} required />
-        <input name="description" placeholder="Description" value={form.description} onChange={handleChange} />
-        <button type="submit">Add House</button>
-      </form>
+        <div className="nav-links">
+          <Link to="/">Home</Link>
+          <Link to="/add">Add Property</Link>
+          <Link to="/bookings">Bookings</Link>
 
-      <h2>Available Houses</h2>
-      {houses.map((house) => (
-        <div key={house._id} className="house-card">
-          <h3>{house.title}</h3>
-          <p>Price: {house.price}</p>
-          <p>Location: {house.location}</p>
-          <p>{house.description}</p>
-          <button onClick={() => deleteHouse(house._id)}>Delete</button>
+          {!token ? (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+            </>
+          ) : (
+            <button onClick={handleLogout}>Logout</button>
+          )}
         </div>
-      ))}
-    </div>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route
+          path="/add"
+          element={
+            <ProtectedRoute>
+              <AddProperty />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/booking/:id" element={<Booking />} />
+        <Route path="/bookings" element={<BookingsList />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
   );
 }
 

@@ -4,6 +4,7 @@ body {
   background: linear-gradient(to right, #4e73df, #1cc88a);
 }
 
+/* Container Card */
 .container {
   max-width: 800px;
   margin: 40px auto;
@@ -13,11 +14,17 @@ body {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* Headings */
 h1 {
   text-align: center;
   margin-bottom: 20px;
 }
 
+h2 {
+  margin-bottom: 15px;
+}
+
+/* Forms */
 form {
   display: grid;
   gap: 10px;
@@ -30,6 +37,7 @@ input {
   border: 1px solid #ccc;
 }
 
+/* Buttons */
 button {
   padding: 10px;
   border: none;
@@ -44,9 +52,67 @@ button:hover {
   background-color: #2e59d9;
 }
 
+/* House Card */
 .house-card {
   background: #f8f9fc;
   padding: 15px;
   margin-top: 10px;
   border-radius: 8px;
+  transition: 0.2s;
+}
+
+.house-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2e59d9;
+  padding: 15px 40px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar h2 {
+  margin: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.navbar a:hover {
+  opacity: 0.8;
+}
+
+.navbar button {
+  background: #ff4d4d;
+  padding: 6px 12px;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  flex: 1;
+}
+
+.search-box button {
+  padding: 8px 15px;
 }
